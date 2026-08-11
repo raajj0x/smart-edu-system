@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const http = require('http'); 
 const { Server } = require('socket.io'); 
+const path = require('path'); // 🔥 NEW: Required for serving frontend files
 
 const app = express();
 
@@ -28,18 +29,26 @@ app.use('/api/teacher', require('./routes/teacher'));
 app.use('/api/student', require('./routes/student'));     
 app.use('/api/chat', require('./routes/chat'));      
 app.use('/api/communication', require('./routes/communication')); 
-app.use('/api/announcements', require('./routes/announcement')); // 🔥 NEW CLEAN ROUTE
+app.use('/api/announcements', require('./routes/announcement'));
 
 // ==========================================
-// 🔌 WEBSOCKET (SOCKET.IO) SETUP
+// 🔥 SERVE REACT FRONTEND (NEW)
 // ==========================================
+// This tells Express to serve the static files from Vite's 'dist' folder
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Catch-all route to hand over routing to React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
+
 // ==========================================
 // 🔌 WEBSOCKET (SOCKET.IO) SETUP
 // ==========================================
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { 
-    origin: "*", // 🔥 FIX: Allows your Vercel/Netlify frontend to connect
+    origin: "*", 
     methods: ["GET", "POST", "PUT", "DELETE"] 
   }
 });
