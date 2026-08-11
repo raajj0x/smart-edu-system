@@ -32,14 +32,14 @@ app.use('/api/communication', require('./routes/communication'));
 app.use('/api/announcements', require('./routes/announcement'));
 
 // ==========================================
-// 🔥 SERVE REACT FRONTEND (NEW)
+// 🔥 SERVE REACT FRONTEND
 // ==========================================
-// This tells Express to serve the static files from Vite's 'dist' folder
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Serve static files from 'public' inside backend
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Catch-all route to hand over routing to React Router
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // ==========================================
