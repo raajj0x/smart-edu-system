@@ -40,8 +40,8 @@ const frontendBuildPath = path.resolve(__dirname, '../frontend/dist');
 app.use(express.static(frontendBuildPath));
 
 // Catch-all route to serve index.html for React Router
-// 🔥 FIX: Changed '*' to '/(.*)' for Express 5 compatibility
-app.get('/(.*)', (req, res) => {
+// 🔥 FIX: Express 5 requires named wildcards like '/*splat'
+app.get('/*splat', (req, res) => {
   res.sendFile(path.join(frontendBuildPath, 'index.html'));
 });
 
