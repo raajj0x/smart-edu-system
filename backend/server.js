@@ -34,12 +34,15 @@ app.use('/api/announcements', require('./routes/announcement'));
 // ==========================================
 // 🔥 SERVE REACT FRONTEND
 // ==========================================
-// Serve static files from 'public' inside backend
-app.use(express.static(path.join(__dirname, 'public')));
+const frontendBuildPath = path.resolve(__dirname, '../frontend/dist');
 
-// Catch-all route to hand over routing to React Router
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Serve static assets from frontend/dist
+app.use(express.static(frontendBuildPath));
+
+// Catch-all route to serve index.html for React Router
+// 🔥 FIX: Changed '*' to '/(.*)' for Express 5 compatibility
+app.get('/(.*)', (req, res) => {
+  res.sendFile(path.join(frontendBuildPath, 'index.html'));
 });
 
 // ==========================================
